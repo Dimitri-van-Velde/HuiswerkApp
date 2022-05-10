@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NoteDetailActivity">
+    tools:context=".TaskDetailActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
@@ -18,29 +18,18 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="DETAIL"
+            android:text="OPDRACHT"
             android:textSize="35sp"
             android:textColor="@color/white"
             android:textStyle="bold"
             android:layout_gravity="center"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="SAVE"
-            android:textSize="25sp"
-            android:backgroundTint="@color/white"
-            android:textColor="@color/darkGray"
-            android:textStyle="bold"
-            android:layout_gravity="end"
-            android:onClick="saveNote"/>
 
     </androidx.appcompat.widget.Toolbar>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Title"
+        android:text="Titel"
         android:textSize="25sp"
         android:layout_marginTop="20dp"
         android:textColor="@color/darkGray"
@@ -60,7 +49,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Description"
+        android:text="Beschrijving"
         android:textSize="25sp"
         android:layout_marginTop="20dp"
         android:textColor="@color/darkGray"
@@ -77,17 +66,36 @@
         android:textColor="@color/darkGray"
         android:layout_gravity="center"/>
 
-    <Button
-        android:id="@+id/deleteNoteButton"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="DELETE"
-        android:textSize="25sp"
-        android:backgroundTint="@color/white"
-        android:textColor="@color/red"
-        android:textStyle="bold"
+        android:orientation="vertical"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:onClick="deleteNote"/>
+        android:layout_marginTop="20dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/white"
+            android:onClick="saveTask"
+            android:text="OPSLAAN"
+            android:textColor="@color/darkGray"
+            android:textSize="25sp"
+            android:textStyle="bold"/>
+
+        <Button
+            android:id="@+id/deleteTaskButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@color/white"
+            android:onClick="deleteTask"
+            android:text="VERWIJDEREN"
+            android:textColor="@color/red"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
 </LinearLayout>

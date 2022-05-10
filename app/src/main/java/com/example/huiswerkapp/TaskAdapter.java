@@ -12,26 +12,26 @@ import androidx.annotation.Nullable;
 
 import java.util.List;
 
-public class NoteAdapter extends ArrayAdapter<Note> {
-        public NoteAdapter(Context context, List<Note> notes)
+public class TaskAdapter extends ArrayAdapter<Task> {
+        public TaskAdapter(Context context, List<Task> tasks)
         {
-                super(context, 0, notes);
+                super(context, 0, tasks);
         }
 
         @NonNull
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-                Note note = getItem(position);
+                Task task = getItem(position);
                 if(convertView == null)
                 {
-                        convertView = LayoutInflater.from(getContext()).inflate(R.layout.note_cell, parent, false);
+                        convertView = LayoutInflater.from(getContext()).inflate(R.layout.task_cell, parent, false);
                 }
 
                 TextView title = convertView.findViewById(R.id.cellTitle);
                 TextView desc = convertView.findViewById(R.id.cellDesc);
 
-                title.setText(note.getTitle());
-                desc.setText(note.getDescription());
+                title.setText(task.getTitle());
+                desc.setText(task.getDescription());
 
                 return convertView;
         }

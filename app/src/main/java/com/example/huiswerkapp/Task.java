@@ -3,43 +3,43 @@ package com.example.huiswerkapp;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Note {
-    public static ArrayList<Note> noteArrayList = new ArrayList<>();
-    public static String NOTE_EDIT_EXTRA = "noteEdit";
+public class Task {
+    public static ArrayList<Task> taskArrayList = new ArrayList<>();
+    public static String TASK_EDIT_EXTRA = "taskEdit";
 
     private int id;
     private String title;
     private String description;
     private Date deleted;
 
-    public Note(int id, String title, String description, Date deleted) {
+    public Task(int id, String title, String description, Date deleted) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.deleted = deleted;
     }
 
-    public Note(int id, String title, String description) {
+    public Task(int id, String title, String description) {
         this.id = id;
         this.title = title;
         this.description = description;
         deleted = null;
     }
 
-    public static Note getNoteForID(int passedNoteID) {
-        for(Note note : noteArrayList) {
-            if(note.getId() == passedNoteID) {
-                return note;
+    public static Task getTaskForID(int passedTaskID) {
+        for(Task task : taskArrayList) {
+            if(task.getId() == passedTaskID) {
+                return task;
             }
         }
         return null;
     }
 
-    public static ArrayList<Note> nonDeletedNotes() {
-        ArrayList<Note> nonDeleted = new ArrayList<>();
-        for(Note note : noteArrayList) {
-            if(note.deleted == null) {
-                nonDeleted.add(note);
+    public static ArrayList<Task> nonDeletedTasks() {
+        ArrayList<Task> nonDeleted = new ArrayList<>();
+        for(Task task : taskArrayList) {
+            if(task.deleted == null) {
+                nonDeleted.add(task);
             }
         }
 

@@ -10,7 +10,7 @@ import android.widget.ListView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ListView noteListView;
+    private ListView taskListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,44 +18,44 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initwidgets();
         loadFromDBToMemory();
-        setNoteAdapter();
+        setTaskAdapter();
         setOnClickListener();
     }
 
     private void initwidgets() {
-        noteListView = findViewById(R.id.noteListView);
+        taskListView = findViewById(R.id.taskListView);
     }
 
     private void loadFromDBToMemory() {
         SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
-        sqLiteManager.populateNoteListArray();
+        sqLiteManager.populateTaskListArray();
     }
 
-    private void setNoteAdapter() {
-        NoteAdapter noteAdapter = new NoteAdapter(getApplicationContext(), Note.nonDeletedNotes());
-        noteListView.setAdapter(noteAdapter);
+    private void setTaskAdapter() {
+        TaskAdapter taskAdapter = new TaskAdapter(getApplicationContext(), Task.nonDeletedTasks());
+        taskListView.setAdapter(taskAdapter);
     }
 
     private void setOnClickListener() {
-        noteListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        taskListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Note selectedNote = (Note) noteListView.getItemAtPosition(position);
-                Intent editNoteIntent = new Intent(getApplicationContext(), NoteDetailActivity.class);
-                editNoteIntent.putExtra(Note.NOTE_EDIT_EXTRA, selectedNote.getId());
-                startActivity(editNoteIntent);
+                Task selectedTask = (Task) taskListView.getItemAtPosition(position);
+                Intent editTaskIntent = new Intent(getApplicationContext(), TaskDetailActivity.class);
+                editTaskIntent.putExtra(Task.TASK_EDIT_EXTRA, selectedTask.getId());
+                startActivity(editTaskIntent);
             }
         });
     }
 
-    public void newNote(View view) {
-        Intent newNoteIntent = new Intent(this, NoteDetailActivity.class);
-        startActivity(newNoteIntent);
+    public void newTask(View view) {
+        Intent newTaskIntent = new Intent(this, TaskDetailActivity.class);
+        startActivity(newTaskIntent);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        setNoteAdapter();
+        setTaskAdapter();
     }
 }

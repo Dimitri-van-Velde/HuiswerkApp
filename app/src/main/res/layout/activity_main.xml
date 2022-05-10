@@ -18,7 +18,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="NOTES"
+            android:text="HUISWERK"
             android:textSize="35sp"
             android:textColor="@color/white"
             android:textStyle="bold"
@@ -32,12 +32,12 @@
             android:textColor="@color/white"
             android:textStyle="bold"
             android:layout_gravity="end"
-            android:onClick="newNote"/>
+            android:onClick="newTask"/>
 
     </androidx.appcompat.widget.Toolbar>
 
     <ListView
-        android:id="@+id/noteListView"
+        android:id="@+id/taskListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="3dp"

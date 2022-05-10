@@ -16,9 +16,9 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
     private static SQLiteManager sqLiteManager;
 
-    private static final String DATABASE_NAME = "NoteDB";
+    private static final String DATABASE_NAME = "DB";
     private static final int DATABASE_VERSION = 1;
-    private static final String TABLE_NAME = "Note";
+    private static final String TABLE_NAME = "Task";
     private static final String COUNTER = "Counter";
 
     private static final String ID_FIELD = "id";
@@ -66,20 +66,20 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
     }
 
-    public void addNoteToDatabase(Note note)
+    public void addTaskToDatabase(Task task)
     {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(ID_FIELD, note.getId());
-        contentValues.put(TITLE_FIELD, note.getTitle());
-        contentValues.put(DESC_FIELD, note.getDescription());
-        contentValues.put(DELETED_FIELD, getStringFromDate(note.getDeleted()));
+        contentValues.put(ID_FIELD, task.getId());
+        contentValues.put(TITLE_FIELD, task.getTitle());
+        contentValues.put(DESC_FIELD, task.getDescription());
+        contentValues.put(DELETED_FIELD, getStringFromDate(task.getDeleted()));
 
         sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
     }
 
-    public void populateNoteListArray() {
+    public void populateTaskListArray() {
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
 
         try (Cursor result = sqLiteDatabase.rawQuery("SELECT * FROM " + TABLE_NAME, null)) {
@@ -92,22 +92,22 @@ public class SQLiteManager extends SQLiteOpenHelper {
                     String desc = result.getString(3);
                     String stringDeleted = result.getString(4);
                     Date deleted = getDateFromString(stringDeleted);
-                    Note note = new Note(id, title, desc, deleted);
-                    Note.noteArrayList.add(note);
+                    Task task = new Task(id, title, desc, deleted);
+                    Task.taskArrayList.add(task);
                 }
             }
         }
     }
 
-    public void updateNoteInDB(Note note) {
+    public void updateTaskInDB(Task task) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(ID_FIELD, note.getId());
-        contentValues.put(TITLE_FIELD, note.getTitle());
-        contentValues.put(DESC_FIELD, note.getDescription());
-        contentValues.put(DELETED_FIELD, getStringFromDate(note.getDeleted()));
+        contentValues.put(ID_FIELD, task.getId());
+        contentValues.put(TITLE_FIELD, task.getTitle());
+        contentValues.put(DESC_FIELD, task.getDescription());
+        contentValues.put(DELETED_FIELD, getStringFromDate(task.getDeleted()));
 
-        sqLiteDatabase.update(TABLE_NAME, contentValues, ID_FIELD + " =? ", new String[]{String.valueOf(note.getId())});
+        sqLiteDatabase.update(TABLE_NAME, contentValues, ID_FIELD + " =? ", new String[]{String.valueOf(task.getId())});
     }
 
     private String getStringFromDate(Date date) {
