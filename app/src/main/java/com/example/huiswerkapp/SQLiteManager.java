@@ -16,7 +16,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
     private static SQLiteManager sqLiteManager;
 
-    private static final String DATABASE_NAME = "DB3";
+    private static final String DATABASE_NAME = "DB5";
     private static final int DATABASE_VERSION = 1;
     private static final String TASK_TABLE_NAME = "Task";
     private static final String SUBJECT_TABLE_NAME = "Subject";
@@ -27,6 +27,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
     private static final String TITLE_FIELD = "title";
     private static final String DESC_FIELD = "desc";
     private static final String SUBJECT_FIELD = "subject";
+    private static final String ESTIMATED_FIELD = "time_estimated";
     private static final String DELETED_FIELD = "deleted";
     private static final String NAME_FIELD = "name";
 
@@ -65,6 +66,8 @@ public class SQLiteManager extends SQLiteOpenHelper {
                 .append(" TEXT, ")
                 .append(SUBJECT_FIELD)
                 .append(" TEXT, ")
+                .append(ESTIMATED_FIELD)
+                .append(" TEXT, ")
                 .append(DELETED_FIELD)
                 .append(" TEXT)");
         sqLiteDatabase.execSQL(task_sql.toString());
@@ -99,6 +102,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
         contentValues.put(TITLE_FIELD, task.getTitle());
         contentValues.put(DESC_FIELD, task.getDescription());
         contentValues.put(SUBJECT_FIELD, task.getSubject());
+        contentValues.put(ESTIMATED_FIELD, task.getTimeEstimated());
         contentValues.put(DELETED_FIELD, getStringFromDate(task.getDeleted()));
 
         sqLiteDatabase.insert(TASK_TABLE_NAME, null, contentValues);
@@ -129,9 +133,10 @@ public class SQLiteManager extends SQLiteOpenHelper {
                     String title = result.getString(2);
                     String desc = result.getString(3);
                     String subject = result.getString(4);
-                    String stringDeleted = result.getString(5);
+                    String timeEstimated = result.getString(5);
+                    String stringDeleted = result.getString(6);
                     Date deleted = getDateFromString(stringDeleted);
-                    Task task = new Task(id, title, desc, subject, deleted);
+                    Task task = new Task(id, title, desc, subject, timeEstimated, deleted);
                     Task.taskArrayList.add(task);
                 }
             }
@@ -167,6 +172,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
         contentValues.put(TITLE_FIELD, task.getTitle());
         contentValues.put(DESC_FIELD, task.getDescription());
         contentValues.put(SUBJECT_FIELD, task.getSubject());
+        contentValues.put(ESTIMATED_FIELD, task.getTimeEstimated());
         contentValues.put(DELETED_FIELD, getStringFromDate(task.getDeleted()));
 
         sqLiteDatabase.update(TASK_TABLE_NAME, contentValues, ID_FIELD + " =? ", new String[]{String.valueOf(task.getId())});

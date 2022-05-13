@@ -26,6 +26,7 @@
             android:layout_height="wrap_content"
             android:text="(h)"
             android:paddingLeft="5dp"
+            android:paddingTop="5dp"
             android:maxLines="1"
             android:textColor="@color/darkGray"
             android:textSize="13sp"

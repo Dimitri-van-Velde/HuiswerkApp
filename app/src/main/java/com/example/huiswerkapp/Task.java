@@ -11,21 +11,24 @@ public class Task {
     private String title;
     private String description;
     private String subject;
+    private String timeEstimated;
     private Date deleted;
 
-    public Task(int id, String title, String description, String subject, Date deleted) {
+    public Task(int id, String title, String description, String subject, String timeEstimated, Date deleted) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.subject = subject;
+        this.timeEstimated = timeEstimated;
         this.deleted = deleted;
     }
 
-    public Task(int id, String title, String description, String subject) {
+    public Task(int id, String title, String description, String subject, String timeEstimated) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.subject = subject;
+        this.timeEstimated = timeEstimated;
         deleted = null;
     }
 
@@ -79,6 +82,14 @@ public class Task {
 
     public void setSubject(String subject) {
         this.subject = subject;
+    }
+
+    public String getTimeEstimated() {
+        return timeEstimated;
+    }
+
+    public void setTimeEstimated(String timeEstimated) {
+        this.timeEstimated = timeEstimated;
     }
 
     public Date getDeleted() {

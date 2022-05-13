@@ -24,7 +24,7 @@ import java.util.List;
 
 public class TaskDetailActivity extends AppCompatActivity {
 
-    private EditText titleEditText, descEditText;
+    private EditText titleEditText, descEditText, timeEstimatedText;
     private Button deleteButton;
     private Spinner selectSubject;
     private Task selectedTask;
@@ -59,6 +59,7 @@ public class TaskDetailActivity extends AppCompatActivity {
         descEditText = findViewById(R.id.descriptionEditText);
         deleteButton = findViewById(R.id.deleteTaskButton);
         selectSubject = findViewById(R.id.selectSubject);
+        timeEstimatedText = findViewById(R.id.timeEstimatedEditText);
     }
 
     private void populateSpinner() {
@@ -82,6 +83,7 @@ public class TaskDetailActivity extends AppCompatActivity {
             titleEditText.setText(selectedTask.getTitle());
             descEditText.setText(selectedTask.getDescription());
             selectSubject.setSelection(getIndex(selectSubject, selectedTask.getSubject()));
+            timeEstimatedText.setText(selectedTask.getTimeEstimated());
         }
         else {
             deleteButton.setVisibility(View.INVISIBLE);
@@ -103,10 +105,11 @@ public class TaskDetailActivity extends AppCompatActivity {
         String title = String.valueOf(titleEditText.getText());
         String desc = String.valueOf(descEditText.getText());
         String subject = String.valueOf(selectSubject.getSelectedItem().toString());
+        String estTime = String.valueOf(timeEstimatedText.getText());
 
         if(selectedTask == null) {
             int id = Task.taskArrayList.size();
-            Task newTask = new Task(id, title, desc, subject);
+            Task newTask = new Task(id, title, desc, subject, estTime);
             Task.taskArrayList.add(newTask);
             sqLiteManager.addTaskToDatabase(newTask);
         }
@@ -114,6 +117,7 @@ public class TaskDetailActivity extends AppCompatActivity {
             selectedTask.setTitle(title);
             selectedTask.setDescription(desc);
             selectedTask.setSubject(subject);
+            selectedTask.setTimeEstimated(estTime);
             sqLiteManager.updateTaskInDB(selectedTask);
         }
         finish();

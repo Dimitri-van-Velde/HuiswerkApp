@@ -32,11 +32,31 @@ public class TaskAdapter extends ArrayAdapter<Task> {
                 TextView title = convertView.findViewById(R.id.cellTitle);
                 TextView desc = convertView.findViewById(R.id.cellDesc);
                 TextView subject = convertView.findViewById(R.id.cellSubject);
+                TextView timeEstimated = convertView.findViewById(R.id.cellEstimatedTime);
 
                 title.setText(task.getTitle());
                 desc.setText(task.getDescription());
                 subject.setText(task.getSubject());
+                timeEstimated.setText(convertTimeEstimated(task));
 
                 return convertView;
+        }
+
+        public String convertTimeEstimated(Task task) {
+                String converted;
+                int timeEstimated = Integer.parseInt(task.getTimeEstimated());
+                int convertedTimeHours = (timeEstimated - (timeEstimated % 60)) / 60;
+                int convertedTimeMinutes = timeEstimated % 60;
+
+                if(convertedTimeMinutes == 0) {
+                        converted = "(" + convertedTimeHours + "u)";
+                        return converted;
+                } else if(convertedTimeHours == 0) {
+                        converted = "(" + convertedTimeMinutes + "m)";
+                        return converted;
+                } else {
+                        converted = "(" + convertedTimeHours + "u " + convertedTimeMinutes + "m)";
+                        return converted;
+                }
         }
 }
