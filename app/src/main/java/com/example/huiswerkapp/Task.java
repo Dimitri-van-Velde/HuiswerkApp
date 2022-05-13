@@ -10,19 +10,22 @@ public class Task {
     private int id;
     private String title;
     private String description;
+    private String subject;
     private Date deleted;
 
-    public Task(int id, String title, String description, Date deleted) {
+    public Task(int id, String title, String description, String subject, Date deleted) {
         this.id = id;
         this.title = title;
         this.description = description;
+        this.subject = subject;
         this.deleted = deleted;
     }
 
-    public Task(int id, String title, String description) {
+    public Task(int id, String title, String description, String subject) {
         this.id = id;
         this.title = title;
         this.description = description;
+        this.subject = subject;
         deleted = null;
     }
 
@@ -68,6 +71,14 @@ public class Task {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
     public Date getDeleted() {

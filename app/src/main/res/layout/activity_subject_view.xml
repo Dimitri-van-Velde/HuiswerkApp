@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/drawer_layout"
-    tools:context=".MainActivity"
+    tools:context=".SubjectView"
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
@@ -14,7 +14,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity">
+        tools:context=".SubjectView">
 
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
@@ -27,15 +27,15 @@
             android:elevation="4dp"/>
 
         <ListView
-            android:id="@+id/taskListView"
+            android:id="@+id/subjectListView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:dividerHeight="2dp"
             android:divider="@color/darkGray"/>
-        
+
     </LinearLayout>
-    
+
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"

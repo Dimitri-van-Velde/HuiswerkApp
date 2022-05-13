@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HuiswerkApp">
         <activity
+            android:name=".SubjectView"
+            android:exported="false" />
+        <activity
+            android:name=".SubjectDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".TaskDetailActivity"
             android:exported="false" />
         <activity

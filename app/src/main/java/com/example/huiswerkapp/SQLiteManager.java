@@ -16,15 +16,22 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
     private static SQLiteManager sqLiteManager;
 
-    private static final String DATABASE_NAME = "DB";
+    private static final String DATABASE_NAME = "DB3";
     private static final int DATABASE_VERSION = 1;
-    private static final String TABLE_NAME = "Task";
-    private static final String COUNTER = "Counter";
+    private static final String TASK_TABLE_NAME = "Task";
+    private static final String SUBJECT_TABLE_NAME = "Subject";
+    private static final String TASK_COUNTER = "Counter";
+    private static final String SUBJECT_COUNTER = "Counter";
 
     private static final String ID_FIELD = "id";
     private static final String TITLE_FIELD = "title";
     private static final String DESC_FIELD = "desc";
+    private static final String SUBJECT_FIELD = "subject";
     private static final String DELETED_FIELD = "deleted";
+    private static final String NAME_FIELD = "name";
+
+    private boolean tasksLoaded = false;
+    private boolean subjectsLoaded = false;
 
     @SuppressLint("SimpleDateFormat")
     private static final DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
@@ -43,12 +50,12 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        StringBuilder sql;
-        sql = new StringBuilder()
+        StringBuilder task_sql;
+        task_sql = new StringBuilder()
                 .append("CREATE TABLE ")
-                .append(TABLE_NAME)
+                .append(TASK_TABLE_NAME)
                 .append("(")
-                .append(COUNTER)
+                .append(TASK_COUNTER)
                 .append(" INTEGER PRIMARY KEY AUTOINCREMENT, ")
                 .append(ID_FIELD)
                 .append(" INT, ")
@@ -56,9 +63,26 @@ public class SQLiteManager extends SQLiteOpenHelper {
                 .append(" TEXT, ")
                 .append(DESC_FIELD)
                 .append(" TEXT, ")
+                .append(SUBJECT_FIELD)
+                .append(" TEXT, ")
                 .append(DELETED_FIELD)
                 .append(" TEXT)");
-        sqLiteDatabase.execSQL(sql.toString());
+        sqLiteDatabase.execSQL(task_sql.toString());
+
+        StringBuilder subject_sql;
+        subject_sql = new StringBuilder()
+                .append("CREATE TABLE ")
+                .append(SUBJECT_TABLE_NAME)
+                .append("(")
+                .append(SUBJECT_COUNTER)
+                .append(" INTEGER PRIMARY KEY AUTOINCREMENT, ")
+                .append(ID_FIELD)
+                .append(" INT, ")
+                .append(NAME_FIELD)
+                .append(" TEXT, ")
+                .append(DELETED_FIELD)
+                .append(" TEXT)");
+        sqLiteDatabase.execSQL(subject_sql.toString());
     }
 
     @Override
@@ -74,15 +98,29 @@ public class SQLiteManager extends SQLiteOpenHelper {
         contentValues.put(ID_FIELD, task.getId());
         contentValues.put(TITLE_FIELD, task.getTitle());
         contentValues.put(DESC_FIELD, task.getDescription());
+        contentValues.put(SUBJECT_FIELD, task.getSubject());
         contentValues.put(DELETED_FIELD, getStringFromDate(task.getDeleted()));
 
-        sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
+        sqLiteDatabase.insert(TASK_TABLE_NAME, null, contentValues);
+    }
+
+    public void addSubjectToDatabase(Subject subject)
+    {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ID_FIELD, subject.getId());
+        contentValues.put(NAME_FIELD, subject.getName());
+        contentValues.put(DELETED_FIELD, getStringFromDate(subject.getDeleted()));
+
+        sqLiteDatabase.insert(SUBJECT_TABLE_NAME, null, contentValues);
     }
 
     public void populateTaskListArray() {
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
 
-        try (Cursor result = sqLiteDatabase.rawQuery("SELECT * FROM " + TABLE_NAME, null)) {
+        if(tasksLoaded) return;
+        try (Cursor result = sqLiteDatabase.rawQuery("SELECT * FROM " + TASK_TABLE_NAME, null)) {
             if(result.getCount() != 0)
             {
                 while (result.moveToNext())
@@ -90,12 +128,35 @@ public class SQLiteManager extends SQLiteOpenHelper {
                     int id = result.getInt(1);
                     String title = result.getString(2);
                     String desc = result.getString(3);
-                    String stringDeleted = result.getString(4);
+                    String subject = result.getString(4);
+                    String stringDeleted = result.getString(5);
                     Date deleted = getDateFromString(stringDeleted);
-                    Task task = new Task(id, title, desc, deleted);
+                    Task task = new Task(id, title, desc, subject, deleted);
                     Task.taskArrayList.add(task);
                 }
             }
+            tasksLoaded = true;
+        }
+    }
+
+    public void populateSubjectListArray() {
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+
+        if(subjectsLoaded) return;
+        try (Cursor result = sqLiteDatabase.rawQuery("SELECT * FROM " + SUBJECT_TABLE_NAME, null)) {
+            if(result.getCount() != 0)
+            {
+                while (result.moveToNext())
+                {
+                    int id = result.getInt(1);
+                    String name = result.getString(2);
+                    String stringDeleted = result.getString(3);
+                    Date deleted = getDateFromString(stringDeleted);
+                    Subject subject = new Subject(id, name, deleted);
+                    Subject.subjectArrayList.add(subject);
+                }
+            }
+            subjectsLoaded = true;
         }
     }
 
@@ -105,9 +166,20 @@ public class SQLiteManager extends SQLiteOpenHelper {
         contentValues.put(ID_FIELD, task.getId());
         contentValues.put(TITLE_FIELD, task.getTitle());
         contentValues.put(DESC_FIELD, task.getDescription());
+        contentValues.put(SUBJECT_FIELD, task.getSubject());
         contentValues.put(DELETED_FIELD, getStringFromDate(task.getDeleted()));
 
-        sqLiteDatabase.update(TABLE_NAME, contentValues, ID_FIELD + " =? ", new String[]{String.valueOf(task.getId())});
+        sqLiteDatabase.update(TASK_TABLE_NAME, contentValues, ID_FIELD + " =? ", new String[]{String.valueOf(task.getId())});
+    }
+
+    public void updateSubjectInDB(Subject subject) {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ID_FIELD, subject.getId());
+        contentValues.put(NAME_FIELD, subject.getName());
+        contentValues.put(DELETED_FIELD, getStringFromDate(subject.getDeleted()));
+
+        sqLiteDatabase.update(SUBJECT_TABLE_NAME, contentValues, ID_FIELD + " =? ", new String[]{String.valueOf(subject.getId())});
     }
 
     private String getStringFromDate(Date date) {

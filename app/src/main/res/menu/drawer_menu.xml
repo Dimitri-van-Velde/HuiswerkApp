@@ -6,7 +6,7 @@
         android:id="@+id/task_group">
         <item android:id="@+id/nav_seeTasks"
             android:icon="@drawable/ic_baseline_notes_24"
-            android:title="Alle Opdrachten"/>
+            android:title="Opdrachten"/>
         <item android:id="@+id/nav_seeFinishedTasks"
             android:icon="@drawable/ic_baseline_check_24"
             android:title="Gemaakte Opdrachten"/>
@@ -18,7 +18,7 @@
         android:id="@+id/subject_group">
         <item android:id="@+id/nav_seeSubjects"
             android:icon="@drawable/ic_baseline_notes_24"
-            android:title="Alle Vakken"/>
+            android:title="Vakken"/>
         <item android:id="@+id/nav_addSubject"
             android:icon="@drawable/ic_baseline_add_24"
             android:title="Vak Toevoegen"/>

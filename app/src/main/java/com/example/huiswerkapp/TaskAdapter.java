@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 public class TaskAdapter extends ArrayAdapter<Task> {
@@ -29,9 +31,11 @@ public class TaskAdapter extends ArrayAdapter<Task> {
 
                 TextView title = convertView.findViewById(R.id.cellTitle);
                 TextView desc = convertView.findViewById(R.id.cellDesc);
+                TextView subject = convertView.findViewById(R.id.cellSubject);
 
                 title.setText(task.getTitle());
                 desc.setText(task.getDescription());
+                subject.setText(task.getSubject());
 
                 return convertView;
         }
