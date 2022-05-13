@@ -1,12 +1,21 @@
 package com.example.huiswerkapp;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.Date;
 
@@ -22,6 +31,22 @@ public class TaskDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_task_detail);
         initWidgets();
         checkForEditTask();
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        if (selectedTask != null) {
+            toolbar.setTitle("Opdracht Aanpassen");
+        } else {
+            toolbar.setTitle("Opdracht Toevoegen");
+        }
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     private void initWidgets() {
@@ -69,5 +94,13 @@ public class TaskDetailActivity extends AppCompatActivity {
         SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
         sqLiteManager.updateTaskInDB(selectedTask);
         finish();
+    }
+
+    @Override
+    protected void onResume() {
+        NavigationView navigationView = findViewById(R.id.nav_view);
+
+        super.onResume();
+        navigationView.setCheckedItem(R.id.nav_addTask);
     }
 }
