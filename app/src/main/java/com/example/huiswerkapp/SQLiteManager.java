@@ -33,9 +33,6 @@ public class SQLiteManager extends SQLiteOpenHelper {
     private static final String DELETED_FIELD = "deleted";
     private static final String NAME_FIELD = "name";
 
-    private boolean tasksLoaded = false;
-    private boolean subjectsLoaded = false;
-
     @SuppressLint("SimpleDateFormat")
     private static final DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
     @SuppressLint("SimpleDateFormat")
@@ -133,8 +130,10 @@ public class SQLiteManager extends SQLiteOpenHelper {
     public void populateTaskListArray() {
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
 
-        if(tasksLoaded) return;
-        try (Cursor result = sqLiteDatabase.rawQuery("SELECT * FROM " + TASK_TABLE_NAME, null)) {
+        Task.taskArrayList.clear();
+        try (Cursor result = sqLiteDatabase.rawQuery("SELECT * FROM " + TASK_TABLE_NAME +
+                " ORDER BY " + OWN_DEADLINE_FIELD + " ASC, " +
+                ACTUAL_DEADLINE_FIELD + " ASC", null)) {
             if(result.getCount() != 0)
             {
                 while (result.moveToNext())
@@ -154,14 +153,13 @@ public class SQLiteManager extends SQLiteOpenHelper {
                     Task.taskArrayList.add(task);
                 }
             }
-            tasksLoaded = true;
         }
     }
 
     public void populateSubjectListArray() {
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
 
-        if(subjectsLoaded) return;
+        Subject.subjectArrayList.clear();
         try (Cursor result = sqLiteDatabase.rawQuery("SELECT * FROM " + SUBJECT_TABLE_NAME, null)) {
             if(result.getCount() != 0)
             {
@@ -175,7 +173,6 @@ public class SQLiteManager extends SQLiteOpenHelper {
                     Subject.subjectArrayList.add(subject);
                 }
             }
-            subjectsLoaded = true;
         }
     }
 
