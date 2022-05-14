@@ -48,7 +48,10 @@ public class TaskAdapter extends ArrayAdapter<Task> {
                 int convertedTimeHours = (timeEstimated - (timeEstimated % 60)) / 60;
                 int convertedTimeMinutes = timeEstimated % 60;
 
-                if(convertedTimeMinutes == 0) {
+                if(convertedTimeMinutes == 0 & convertedTimeHours == 0) {
+                        converted = "";
+                        return converted;
+                } else if(convertedTimeMinutes == 0) {
                         converted = "(" + convertedTimeHours + "u)";
                         return converted;
                 } else if(convertedTimeHours == 0) {
