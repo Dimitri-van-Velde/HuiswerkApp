@@ -30,7 +30,7 @@ import java.util.List;
 public class TaskDetailActivity extends AppCompatActivity {
 
     private EditText titleEditText, descEditText, timeEstimatedText;
-    private Button deleteButton;
+    private Button deleteButton, finishButton;
     private Spinner selectSubject;
     private DatePicker ownDeadline, actualDeadline;
     private Task selectedTask;
@@ -73,6 +73,7 @@ public class TaskDetailActivity extends AppCompatActivity {
         titleEditText = findViewById(R.id.titleEditText);
         descEditText = findViewById(R.id.descriptionEditText);
         deleteButton = findViewById(R.id.deleteTaskButton);
+        finishButton = findViewById(R.id.finishedTaskButton);
         selectSubject = findViewById(R.id.selectSubject);
         ownDeadline = findViewById(R.id.datePickerOwnDeadline);
         actualDeadline = findViewById(R.id.datePickerActualDeadline);
@@ -110,6 +111,7 @@ public class TaskDetailActivity extends AppCompatActivity {
         }
         else {
             deleteButton.setVisibility(View.INVISIBLE);
+            finishButton.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -134,7 +136,7 @@ public class TaskDetailActivity extends AppCompatActivity {
 
         if(selectedTask == null) {
             int id = Task.taskArrayList.size();
-            Task newTask = new Task(id, title, desc, subject, ownDead, actDead, estTime);
+            Task newTask = new Task(id, title, desc, subject, ownDead, actDead, estTime, false);
             Task.taskArrayList.add(newTask);
             sqLiteManager.addTaskToDatabase(newTask);
         }
@@ -161,6 +163,15 @@ public class TaskDetailActivity extends AppCompatActivity {
         SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
         sqLiteManager.updateTaskInDB(selectedTask);
         finish();
+    }
+
+    public void finishTask(View view) {
+        selectedTask.setDone(true);
+        SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
+        sqLiteManager.updateTaskInDB(selectedTask);
+        finish();
+        Intent intent = new Intent(this, FinishedTasks.class);
+        startActivity(intent);
     }
 
     @Override

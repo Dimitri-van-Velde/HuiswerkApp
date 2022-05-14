@@ -16,22 +16,22 @@ import android.widget.ListView;
 
 import com.google.android.material.navigation.NavigationView;
 
-public class SubjectView extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class FinishedTasks extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
 
-    private ListView subjectListView;
+    private ListView finishedTaskListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_subject_view);
+        setContentView(R.layout.activity_finished_tasks);
         initwidgets();
         loadFromDBToMemory();
-        setSubjectAdapter();
+        setTaskAdapter();
         setOnClickListener();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Vakken");
+        toolbar.setTitle("Gemaakte Opdrachten");
         setSupportActionBar(toolbar);
 
         drawer = findViewById(R.id.drawer_layout);
@@ -43,7 +43,7 @@ public class SubjectView extends AppCompatActivity implements NavigationView.OnN
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        navigationView.setCheckedItem(R.id.nav_seeSubjects);
+        navigationView.setCheckedItem(R.id.nav_seeFinishedTasks);
     }
 
     @Override
@@ -54,13 +54,13 @@ public class SubjectView extends AppCompatActivity implements NavigationView.OnN
                 drawer.closeDrawer(GravityCompat.START);
                 startActivity(newTaskIntent1);
                 break;
-            case R.id.nav_seeFinishedTasks:
-                Intent newTaskIntent2 = new Intent(this, FinishedTasks.class);
+            case R.id.nav_addTask:
+                Intent newTaskIntent2 = new Intent(this, TaskDetailActivity.class);
                 drawer.closeDrawer(GravityCompat.START);
                 startActivity(newTaskIntent2);
                 break;
-            case R.id.nav_addTask:
-                Intent newTaskIntent3 = new Intent(this, TaskDetailActivity.class);
+            case R.id.nav_seeSubjects:
+                Intent newTaskIntent3 = new Intent(this, SubjectView.class);
                 drawer.closeDrawer(GravityCompat.START);
                 startActivity(newTaskIntent3);
                 break;
@@ -84,27 +84,27 @@ public class SubjectView extends AppCompatActivity implements NavigationView.OnN
     }
 
     private void initwidgets() {
-        subjectListView = findViewById(R.id.subjectListView);
+        finishedTaskListView = findViewById(R.id.finishedTaskListView);
     }
 
     private void loadFromDBToMemory() {
         SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
-        sqLiteManager.populateSubjectListArray();
+        sqLiteManager.populateFinishedTaskListArray();
     }
 
-    private void setSubjectAdapter() {
-        SubjectAdapter subjectAdapter = new SubjectAdapter(getApplicationContext(), Subject.nonDeletedSubjects());
-        subjectListView.setAdapter(subjectAdapter);
+    private void setTaskAdapter() {
+        TaskAdapter taskAdapter = new TaskAdapter(getApplicationContext(), Task.finishedTasks());
+        finishedTaskListView.setAdapter(taskAdapter);
     }
 
     private void setOnClickListener() {
-        subjectListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        finishedTaskListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Subject selectedSubject = (Subject) subjectListView.getItemAtPosition(position);
-                Intent editSubjectIntent = new Intent(getApplicationContext(), SubjectDetailActivity.class);
-                editSubjectIntent.putExtra(Subject.SUBJECT_EDIT_EXTRA, selectedSubject.getId());
-                startActivity(editSubjectIntent);
+                Task selectedTask = (Task) finishedTaskListView.getItemAtPosition(position);
+                Intent editTaskIntent = new Intent(getApplicationContext(), FinishedTaskDetailActivity.class);
+                editTaskIntent.putExtra(Task.TASK_EDIT_EXTRA, selectedTask.getId());
+                startActivity(editTaskIntent);
             }
         });
     }
@@ -114,7 +114,7 @@ public class SubjectView extends AppCompatActivity implements NavigationView.OnN
         NavigationView navigationView = findViewById(R.id.nav_view);
 
         super.onResume();
-        setSubjectAdapter();
-        navigationView.setCheckedItem(R.id.nav_seeSubjects);
+        setTaskAdapter();
+        navigationView.setCheckedItem(R.id.nav_seeFinishedTasks);
     }
 }

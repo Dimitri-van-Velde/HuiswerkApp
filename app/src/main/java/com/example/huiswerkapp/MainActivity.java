@@ -50,7 +50,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_seeFinishedTasks:
-
+                Intent newTaskIntent1 = new Intent(this, FinishedTasks.class);
+                drawer.closeDrawer(GravityCompat.START);
+                startActivity(newTaskIntent1);
                 break;
             case R.id.nav_addTask:
                 Intent newTaskIntent2 = new Intent(this, TaskDetailActivity.class);
@@ -88,7 +90,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void loadFromDBToMemory() {
         SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
         sqLiteManager.populateTaskListArray();
-        sqLiteManager.populateSubjectListArray();
     }
 
     private void setTaskAdapter() {

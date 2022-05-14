@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".FinishedTaskDetailActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:context=".FinishedTaskDetailActivity">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/darkGray"
+                android:elevation="4dp"
+                android:minHeight="?actionBarSize"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:popupTheme="@style/Theme.AppCompat.Light" />
+
+            <Button
+                android:id="@+id/unfinishedTaskButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="@color/white"
+                android:onClick="unfinishTask"
+                android:text="OPDRACHT NIET AF"
+                android:textColor="@color/red"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:text="Titel"-->
+<!--                android:textColor="@color/darkGray"-->
+<!--                android:textSize="25sp"-->
+<!--                android:textStyle="bold" />-->
+
+<!--            <EditText-->
+<!--                android:id="@+id/titleEditText"-->
+<!--                android:layout_width="300dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:maxLines="1"-->
+<!--                android:textColor="@color/darkGray"-->
+<!--                android:textSize="25sp" />-->
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:text="Beschrijving"-->
+<!--                android:textColor="@color/darkGray"-->
+<!--                android:textSize="25sp"-->
+<!--                android:textStyle="bold" />-->
+
+<!--            <EditText-->
+<!--                android:id="@+id/descriptionEditText"-->
+<!--                android:layout_width="300dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:minLines="3"-->
+<!--                android:textColor="@color/darkGray"-->
+<!--                android:textSize="25sp" />-->
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:text="Vak"-->
+<!--                android:textColor="@color/darkGray"-->
+<!--                android:textSize="25sp"-->
+<!--                android:textStyle="bold" />-->
+
+<!--            <Spinner-->
+<!--                android:id="@+id/selectSubject"-->
+<!--                android:layout_width="300dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginTop="20dp"/>-->
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:text="Eigen Deadline"-->
+<!--                android:textColor="@color/darkGray"-->
+<!--                android:textSize="25sp"-->
+<!--                android:textStyle="bold" />-->
+
+<!--            <DatePicker-->
+<!--                android:id="@+id/datePickerOwnDeadline"-->
+<!--                android:layout_width="300dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginTop="20dp"/>-->
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:text="Uiterste Deadline"-->
+<!--                android:textColor="@color/darkGray"-->
+<!--                android:textSize="25sp"-->
+<!--                android:textStyle="bold" />-->
+
+<!--            <DatePicker-->
+<!--                android:id="@+id/datePickerActualDeadline"-->
+<!--                android:layout_width="300dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginTop="20dp"/>-->
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:text="Verwachte tijd bezig (minuten)"-->
+<!--                android:textColor="@color/darkGray"-->
+<!--                android:textSize="25sp"-->
+<!--                android:textStyle="bold" />-->
+
+<!--            <EditText-->
+<!--                android:id="@+id/timeEstimatedEditText"-->
+<!--                android:layout_width="150dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:minLines="1"-->
+<!--                android:textColor="@color/darkGray"-->
+<!--                android:textSize="25sp" />-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:orientation="vertical">-->
+
+<!--                <Button-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:backgroundTint="@color/white"-->
+<!--                    android:onClick="saveTask"-->
+<!--                    android:text="OPSLAAN"-->
+<!--                    android:textColor="@color/darkGray"-->
+<!--                    android:textSize="25sp"-->
+<!--                    android:textStyle="bold" />-->
+
+<!--                <Button-->
+<!--                    android:id="@+id/deleteTaskButton"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_marginTop="20dp"-->
+<!--                    android:backgroundTint="@color/white"-->
+<!--                    android:onClick="deleteTask"-->
+<!--                    android:text="VERWIJDEREN"-->
+<!--                    android:textColor="@color/red"-->
+<!--                    android:textSize="25sp"-->
+<!--                    android:textStyle="bold" />-->
+<!--            </LinearLayout>-->
+
+        </LinearLayout>
+    </ScrollView>
+
+    <com.google.android.material.navigation.NavigationView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:id="@+id/nav_view"
+        app:headerLayout="@layout/nav_header"
+        app:menu="@menu/drawer_menu"/>
+
+</androidx.drawerlayout.widget.DrawerLayout>

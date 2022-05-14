@@ -28,6 +28,19 @@
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:popupTheme="@style/Theme.AppCompat.Light" />
 
+            <Button
+                android:id="@+id/finishedTaskButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="@color/white"
+                android:onClick="finishTask"
+                android:text="OPDRACHT AF"
+                android:textColor="@color/green"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
