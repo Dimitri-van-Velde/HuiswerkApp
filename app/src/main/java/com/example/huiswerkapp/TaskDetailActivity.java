@@ -8,17 +8,22 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.google.android.material.navigation.NavigationView;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -27,7 +32,17 @@ public class TaskDetailActivity extends AppCompatActivity {
     private EditText titleEditText, descEditText, timeEstimatedText;
     private Button deleteButton;
     private Spinner selectSubject;
+    private DatePicker ownDeadline, actualDeadline;
     private Task selectedTask;
+
+    @SuppressLint("SimpleDateFormat")
+    private static final DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+    @SuppressLint("SimpleDateFormat")
+    private static final DateFormat dateFormatYear = new SimpleDateFormat("yyyy");
+    @SuppressLint("SimpleDateFormat")
+    private static final DateFormat dateFormatMonth = new SimpleDateFormat("MM");
+    @SuppressLint("SimpleDateFormat")
+    private static final DateFormat dateFormatDay = new SimpleDateFormat("dd");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +74,8 @@ public class TaskDetailActivity extends AppCompatActivity {
         descEditText = findViewById(R.id.descriptionEditText);
         deleteButton = findViewById(R.id.deleteTaskButton);
         selectSubject = findViewById(R.id.selectSubject);
+        ownDeadline = findViewById(R.id.datePickerOwnDeadline);
+        actualDeadline = findViewById(R.id.datePickerActualDeadline);
         timeEstimatedText = findViewById(R.id.timeEstimatedEditText);
     }
 
@@ -83,6 +100,12 @@ public class TaskDetailActivity extends AppCompatActivity {
             titleEditText.setText(selectedTask.getTitle());
             descEditText.setText(selectedTask.getDescription());
             selectSubject.setSelection(getIndex(selectSubject, selectedTask.getSubject()));
+            ownDeadline.updateDate(Integer.parseInt(dateFormatYear.format(new Date(selectedTask.getOwnDeadline().getTime()))),
+                    Integer.parseInt(dateFormatMonth.format(new Date(selectedTask.getOwnDeadline().getTime()))) - 1,
+                    Integer.parseInt(dateFormatDay.format(new Date(selectedTask.getOwnDeadline().getTime()))));
+            actualDeadline.updateDate(Integer.parseInt(dateFormatYear.format(new Date(selectedTask.getActualDeadline().getTime()))),
+                    Integer.parseInt(dateFormatMonth.format(new Date(selectedTask.getActualDeadline().getTime()))) - 1,
+                    Integer.parseInt(dateFormatDay.format(new Date(selectedTask.getActualDeadline().getTime()))));
             timeEstimatedText.setText(selectedTask.getTimeEstimated());
         }
         else {
@@ -105,11 +128,13 @@ public class TaskDetailActivity extends AppCompatActivity {
         String title = String.valueOf(titleEditText.getText());
         String desc = String.valueOf(descEditText.getText());
         String subject = String.valueOf(selectSubject.getSelectedItem().toString());
+        Date ownDead = pickerToDate(ownDeadline);
+        Date actDead = pickerToDate(actualDeadline);
         String estTime = String.valueOf(timeEstimatedText.getText());
 
         if(selectedTask == null) {
             int id = Task.taskArrayList.size();
-            Task newTask = new Task(id, title, desc, subject, estTime);
+            Task newTask = new Task(id, title, desc, subject, ownDead, actDead, estTime);
             Task.taskArrayList.add(newTask);
             sqLiteManager.addTaskToDatabase(newTask);
         }
@@ -117,12 +142,18 @@ public class TaskDetailActivity extends AppCompatActivity {
             selectedTask.setTitle(title);
             selectedTask.setDescription(desc);
             selectedTask.setSubject(subject);
+            selectedTask.setOwnDeadline(ownDead);
+            selectedTask.setActualDeadline(actDead);
             selectedTask.setTimeEstimated(estTime);
             sqLiteManager.updateTaskInDB(selectedTask);
         }
         finish();
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+    public Date pickerToDate(DatePicker datePicker) {
+        return new Date(datePicker.getYear() - 1900, datePicker.getMonth(), datePicker.getDayOfMonth());
     }
 
     public void deleteTask(View view) {

@@ -1,5 +1,6 @@
 package com.example.huiswerkapp;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,8 @@ import androidx.annotation.Nullable;
 
 import org.w3c.dom.Text;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class TaskAdapter extends ArrayAdapter<Task> {
@@ -19,6 +22,11 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         {
                 super(context, 0, tasks);
         }
+
+        @SuppressLint("SimpleDateFormat")
+        private static final DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+        @SuppressLint("SimpleDateFormat")
+        private static final DateFormat dateFormatDeadline = new SimpleDateFormat("dd-MM-yyyy");
 
         @NonNull
         @Override
@@ -32,11 +40,15 @@ public class TaskAdapter extends ArrayAdapter<Task> {
                 TextView title = convertView.findViewById(R.id.cellTitle);
                 TextView desc = convertView.findViewById(R.id.cellDesc);
                 TextView subject = convertView.findViewById(R.id.cellSubject);
+                TextView ownDeadline = convertView.findViewById(R.id.cellOwnDeadline);
+                TextView actualDeadline = convertView.findViewById(R.id.cellActualDeadline);
                 TextView timeEstimated = convertView.findViewById(R.id.cellEstimatedTime);
 
                 title.setText(task.getTitle());
                 desc.setText(task.getDescription());
                 subject.setText(task.getSubject());
+                ownDeadline.setText(dateFormatDeadline.format(task.getOwnDeadline()));
+                actualDeadline.setText(dateFormatDeadline.format(task.getActualDeadline()));
                 timeEstimated.setText(convertTimeEstimated(task));
 
                 return convertView;

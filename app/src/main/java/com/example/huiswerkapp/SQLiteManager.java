@@ -16,7 +16,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
     private static SQLiteManager sqLiteManager;
 
-    private static final String DATABASE_NAME = "DB5";
+    private static final String DATABASE_NAME = "DB6";
     private static final int DATABASE_VERSION = 1;
     private static final String TASK_TABLE_NAME = "Task";
     private static final String SUBJECT_TABLE_NAME = "Subject";
@@ -27,6 +27,8 @@ public class SQLiteManager extends SQLiteOpenHelper {
     private static final String TITLE_FIELD = "title";
     private static final String DESC_FIELD = "desc";
     private static final String SUBJECT_FIELD = "subject";
+    private static final String OWN_DEADLINE_FIELD = "own_deadline";
+    private static final String ACTUAL_DEADLINE_FIELD = "actual_deadline";
     private static final String ESTIMATED_FIELD = "time_estimated";
     private static final String DELETED_FIELD = "deleted";
     private static final String NAME_FIELD = "name";
@@ -36,6 +38,8 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
     @SuppressLint("SimpleDateFormat")
     private static final DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+    @SuppressLint("SimpleDateFormat")
+    private static final DateFormat dateFormatDeadline = new SimpleDateFormat("MM-dd-yyyy");
 
     public SQLiteManager(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -65,6 +69,10 @@ public class SQLiteManager extends SQLiteOpenHelper {
                 .append(DESC_FIELD)
                 .append(" TEXT, ")
                 .append(SUBJECT_FIELD)
+                .append(" TEXT, ")
+                .append(OWN_DEADLINE_FIELD)
+                .append(" TEXT, ")
+                .append(ACTUAL_DEADLINE_FIELD)
                 .append(" TEXT, ")
                 .append(ESTIMATED_FIELD)
                 .append(" TEXT, ")
@@ -102,6 +110,8 @@ public class SQLiteManager extends SQLiteOpenHelper {
         contentValues.put(TITLE_FIELD, task.getTitle());
         contentValues.put(DESC_FIELD, task.getDescription());
         contentValues.put(SUBJECT_FIELD, task.getSubject());
+        contentValues.put(OWN_DEADLINE_FIELD, getStringFromDeadlineDate(task.getOwnDeadline()));
+        contentValues.put(ACTUAL_DEADLINE_FIELD, getStringFromDeadlineDate(task.getActualDeadline()));
         contentValues.put(ESTIMATED_FIELD, task.getTimeEstimated());
         contentValues.put(DELETED_FIELD, getStringFromDate(task.getDeleted()));
 
@@ -133,10 +143,14 @@ public class SQLiteManager extends SQLiteOpenHelper {
                     String title = result.getString(2);
                     String desc = result.getString(3);
                     String subject = result.getString(4);
-                    String timeEstimated = result.getString(5);
-                    String stringDeleted = result.getString(6);
+                    String stringOwnDeadline = result.getString(5);
+                    String stringActualDeadline = result.getString(6);
+                    String timeEstimated = result.getString(7);
+                    String stringDeleted = result.getString(8);
+                    Date ownDeadline = getDeadlineDateFromString(stringOwnDeadline);
+                    Date actualDeadline = getDeadlineDateFromString(stringActualDeadline);
                     Date deleted = getDateFromString(stringDeleted);
-                    Task task = new Task(id, title, desc, subject, timeEstimated, deleted);
+                    Task task = new Task(id, title, desc, subject, ownDeadline, actualDeadline, timeEstimated, deleted);
                     Task.taskArrayList.add(task);
                 }
             }
@@ -172,6 +186,8 @@ public class SQLiteManager extends SQLiteOpenHelper {
         contentValues.put(TITLE_FIELD, task.getTitle());
         contentValues.put(DESC_FIELD, task.getDescription());
         contentValues.put(SUBJECT_FIELD, task.getSubject());
+        contentValues.put(OWN_DEADLINE_FIELD, getStringFromDeadlineDate(task.getOwnDeadline()));
+        contentValues.put(ACTUAL_DEADLINE_FIELD, getStringFromDeadlineDate(task.getActualDeadline()));
         contentValues.put(ESTIMATED_FIELD, task.getTimeEstimated());
         contentValues.put(DELETED_FIELD, getStringFromDate(task.getDeleted()));
 
@@ -199,6 +215,22 @@ public class SQLiteManager extends SQLiteOpenHelper {
     private Date getDateFromString(String string) {
         try {
             return dateFormat.parse(string);
+        } catch (ParseException | NullPointerException e) {
+            return null;
+        }
+    }
+
+    private String getStringFromDeadlineDate(Date date) {
+        if(date == null)
+        {
+            return null;
+        }
+        return dateFormatDeadline.format(date);
+    }
+
+    private Date getDeadlineDateFromString(String string) {
+        try {
+            return dateFormatDeadline.parse(string);
         } catch (ParseException | NullPointerException e) {
             return null;
         }

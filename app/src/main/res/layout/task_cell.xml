@@ -76,14 +76,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="-"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:paddingLeft="7dp"
+            android:paddingRight="7dp"
             android:maxLines="1"
             android:textColor="@color/darkGray"
             android:textSize="13sp"/>
 
         <TextView
-            android:id="@+id/cellDeadline"
+            android:id="@+id/cellActualDeadline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="actual deadline"

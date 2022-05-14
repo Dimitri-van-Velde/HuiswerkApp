@@ -11,23 +11,29 @@ public class Task {
     private String title;
     private String description;
     private String subject;
+    private Date ownDeadline;
+    private Date actualDeadline;
     private String timeEstimated;
     private Date deleted;
 
-    public Task(int id, String title, String description, String subject, String timeEstimated, Date deleted) {
+    public Task(int id, String title, String description, String subject, Date ownDeadline, Date actualDeadline, String timeEstimated, Date deleted) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.subject = subject;
+        this.ownDeadline = ownDeadline;
+        this.actualDeadline = actualDeadline;
         this.timeEstimated = timeEstimated;
         this.deleted = deleted;
     }
 
-    public Task(int id, String title, String description, String subject, String timeEstimated) {
+    public Task(int id, String title, String description, String subject, Date ownDeadline, Date actualDeadline, String timeEstimated) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.subject = subject;
+        this.ownDeadline = ownDeadline;
+        this.actualDeadline = actualDeadline;
         this.timeEstimated = timeEstimated;
         deleted = null;
     }
@@ -82,6 +88,22 @@ public class Task {
 
     public void setSubject(String subject) {
         this.subject = subject;
+    }
+
+    public Date getOwnDeadline() {
+        return ownDeadline;
+    }
+
+    public void setOwnDeadline(Date ownDeadline) {
+        this.ownDeadline = ownDeadline;
+    }
+
+    public Date getActualDeadline() {
+        return actualDeadline;
+    }
+
+    public void setActualDeadline(Date actualDeadline) {
+        this.actualDeadline = actualDeadline;
     }
 
     public String getTimeEstimated() {
