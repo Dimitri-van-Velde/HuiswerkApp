@@ -43,13 +43,20 @@ public class TaskAdapter extends ArrayAdapter<Task> {
                 TextView ownDeadline = convertView.findViewById(R.id.cellOwnDeadline);
                 TextView actualDeadline = convertView.findViewById(R.id.cellActualDeadline);
                 TextView timeEstimated = convertView.findViewById(R.id.cellEstimatedTime);
+                TextView dateDone = convertView.findViewById(R.id.cellDateFinished);
 
                 title.setText(task.getTitle());
                 desc.setText(task.getDescription());
                 subject.setText(task.getSubject());
                 ownDeadline.setText(dateFormatDeadline.format(task.getOwnDeadline()));
                 actualDeadline.setText(dateFormatDeadline.format(task.getActualDeadline()));
-                timeEstimated.setText(convertTimeEstimated(task));
+                if(task.isDone()) {
+                        dateDone.setText(dateFormat.format(task.getDateDone()));
+                        timeEstimated.setText("");
+                } else {
+                        dateDone.setText("");
+                        timeEstimated.setText(convertTimeEstimated(task));
+                }
 
                 return convertView;
         }

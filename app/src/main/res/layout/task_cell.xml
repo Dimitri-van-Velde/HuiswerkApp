@@ -32,6 +32,18 @@
             android:textSize="13sp"
             android:layout_gravity="center"/>
 
+        <TextView
+            android:id="@+id/cellDateFinished"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(date finished)"
+            android:paddingLeft="5dp"
+            android:paddingTop="5dp"
+            android:maxLines="1"
+            android:textColor="@color/darkGray"
+            android:textSize="13sp"
+            android:layout_gravity="center"/>
+
     </LinearLayout>
 
 

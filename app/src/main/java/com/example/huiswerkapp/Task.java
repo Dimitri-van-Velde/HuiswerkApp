@@ -15,10 +15,11 @@ public class Task {
     private Date actualDeadline;
     private String timeEstimated;
     private boolean done;
+    private Date dateDone;
     private Date deleted;
 
     public Task(int id, String title, String description, String subject, Date ownDeadline,
-                Date actualDeadline, String timeEstimated, boolean done, Date deleted) {
+                Date actualDeadline, String timeEstimated, boolean done, Date dateDone, Date deleted) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -27,11 +28,12 @@ public class Task {
         this.actualDeadline = actualDeadline;
         this.timeEstimated = timeEstimated;
         this.done = done;
+        this.dateDone = dateDone;
         this.deleted = deleted;
     }
 
     public Task(int id, String title, String description, String subject, Date ownDeadline,
-                Date actualDeadline, String timeEstimated, boolean done) {
+                Date actualDeadline, String timeEstimated, boolean done, Date dateDone) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -40,6 +42,7 @@ public class Task {
         this.actualDeadline = actualDeadline;
         this.timeEstimated = timeEstimated;
         this.done = done;
+        this.dateDone = dateDone;
         deleted = null;
     }
 
@@ -136,6 +139,14 @@ public class Task {
 
     public void setDone(boolean done) {
         this.done = done;
+    }
+
+    public Date getDateDone() {
+        return dateDone;
+    }
+
+    public void setDateDone(Date dateDone) {
+        this.dateDone = dateDone;
     }
 
     public Date getDeleted() {

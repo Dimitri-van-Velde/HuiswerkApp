@@ -133,10 +133,11 @@ public class TaskDetailActivity extends AppCompatActivity {
         Date ownDead = pickerToDate(ownDeadline);
         Date actDead = pickerToDate(actualDeadline);
         String estTime = String.valueOf(timeEstimatedText.getText());
+        Date dateDone = new Date();
 
         if(selectedTask == null) {
             int id = Task.taskArrayList.size();
-            Task newTask = new Task(id, title, desc, subject, ownDead, actDead, estTime, false);
+            Task newTask = new Task(id, title, desc, subject, ownDead, actDead, estTime, false, dateDone);
             Task.taskArrayList.add(newTask);
             sqLiteManager.addTaskToDatabase(newTask);
         }
@@ -167,6 +168,7 @@ public class TaskDetailActivity extends AppCompatActivity {
 
     public void finishTask(View view) {
         selectedTask.setDone(true);
+        selectedTask.setDateDone(new Date());
         SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
         sqLiteManager.updateTaskInDB(selectedTask);
         finish();
