@@ -42,7 +42,19 @@
             android:layout_marginTop="20dp"
             android:maxLines="1"
             android:textColor="@color/darkGray"
-            android:textSize="25sp" />
+            android:textSize="25sp"
+            android:onClick="resetNameError"/>
+
+        <TextView
+            android:id="@+id/nameEditTextError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="3dp"
+            android:textColor="@color/red"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:visibility="gone"/>
 
         <LinearLayout
             android:layout_width="wrap_content"

@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void loadFromDBToMemory() {
         SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
         sqLiteManager.populateTaskListArray();
+        sqLiteManager.populateSubjectListArray();
     }
 
     private void setTaskAdapter() {
