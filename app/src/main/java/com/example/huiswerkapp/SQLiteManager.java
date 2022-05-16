@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -258,14 +259,18 @@ public class SQLiteManager extends SQLiteOpenHelper {
         sqLiteDatabase.update(TASK_TABLE_NAME, contentValues, ID_FIELD + " =? ", new String[]{String.valueOf(task.getId())});
     }
 
-    public void updateSubjectInDB(Subject subject) {
+    public void updateSubjectInDB(Subject subject, String oldName) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(ID_FIELD, subject.getId());
         contentValues.put(NAME_FIELD, subject.getName());
         contentValues.put(DELETED_FIELD, getStringFromDate(subject.getDeleted()));
 
+        ContentValues contentValueName = new ContentValues();
+        contentValueName.put(SUBJECT_FIELD, subject.getName());
+
         sqLiteDatabase.update(SUBJECT_TABLE_NAME, contentValues, ID_FIELD + " =? ", new String[]{String.valueOf(subject.getId())});
+        sqLiteDatabase.update(TASK_TABLE_NAME, contentValueName, SUBJECT_FIELD + " =? AND " + DONE_FIELD + " = 0", new String[]{oldName});
     }
 
     private String getStringFromDate(Date date) {

@@ -3,6 +3,7 @@ package com.example.huiswerkapp;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -87,8 +88,9 @@ public class SubjectDetailActivity extends AppCompatActivity {
             sqLiteManager.addSubjectToDatabase(newSubject);
         }
         else {
+            String oldName = selectedSubject.getName();
             selectedSubject.setName(name);
-            sqLiteManager.updateSubjectInDB(selectedSubject);
+            sqLiteManager.updateSubjectInDB(selectedSubject, oldName);
         }
         finish();
         Intent intent = new Intent(this, SubjectView.class);
@@ -98,7 +100,7 @@ public class SubjectDetailActivity extends AppCompatActivity {
     public void deleteSubject(View view) {
         selectedSubject.setDeleted(new Date());
         SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
-        sqLiteManager.updateSubjectInDB(selectedSubject);
+        sqLiteManager.updateSubjectInDB(selectedSubject, null);
         finish();
     }
 
