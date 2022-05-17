@@ -1,5 +1,6 @@
 package com.example.huiswerkapp;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.ViewCompat;
@@ -98,10 +100,21 @@ public class SubjectDetailActivity extends AppCompatActivity {
     }
 
     public void deleteSubject(View view) {
-        selectedSubject.setDeleted(new Date());
-        SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
-        sqLiteManager.updateSubjectInDB(selectedSubject, null);
-        finish();
+        new AlertDialog.Builder(this)
+                .setTitle("Verwijderen?")
+                .setMessage("Je staat op het punt om het vak \"" + selectedSubject.getName() + "\" te verwijderen. \n" +
+                        "Dit kan niet teruggedraaid worden. \nWeet je het zeker?")
+                .setPositiveButton("Ja, verwijderen!", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        selectedSubject.setDeleted(new Date());
+                        SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(getApplicationContext());
+                        sqLiteManager.updateSubjectInDB(selectedSubject, null);
+                        finish();
+                    }
+                })
+                .setNegativeButton("Nee, toch niet!", null)
+                .show();
     }
 
     public void setErrorResets() {

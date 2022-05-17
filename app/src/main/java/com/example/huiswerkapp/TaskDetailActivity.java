@@ -2,6 +2,7 @@ package com.example.huiswerkapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -10,6 +11,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -210,10 +212,21 @@ public class TaskDetailActivity extends AppCompatActivity {
     }
 
     public void deleteTask(View view) {
-        selectedTask.setDeleted(new Date());
-        SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
-        sqLiteManager.updateTaskInDB(selectedTask);
-        finish();
+        new AlertDialog.Builder(this)
+                .setTitle("Verwijderen?")
+                .setMessage("Je staat op het punt om de opdracht \"" + selectedTask.getTitle() + "\" te verwijderen. \n" +
+                        "Dit kan niet teruggedraaid worden. \nWeet je het zeker?")
+                .setPositiveButton("Ja, verwijderen!", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        selectedTask.setDeleted(new Date());
+                        SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(getApplicationContext());
+                        sqLiteManager.updateTaskInDB(selectedTask);
+                        finish();
+                    }
+                })
+                .setNegativeButton("Nee, toch niet!", null)
+                .show();
     }
 
     public void finishTask(View view) {
