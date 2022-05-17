@@ -10,4 +10,13 @@
     <color name="darkGray">#2C2F33</color>
     <color name="red">#F00</color>
     <color name="green">#00d300</color>
+    <color name="button_light_red">#ffecec</color>
+    <color name="button_medium_red">#FF7574</color>
+    <color name="button_dark_red">#ff4947</color>
+    <color name="button_light_yellow">#fff6d3</color>
+    <color name="button_medium_yellow">#FFDC4D</color>
+    <color name="button_dark_yellow">#ffcd00</color>
+    <color name="button_light_green">#ecffd3</color>
+    <color name="button_medium_green">#78FF26</color>
+    <color name="button_dark_green">#5eff00</color>
 </resources>

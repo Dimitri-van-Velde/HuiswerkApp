@@ -49,7 +49,11 @@ public class TaskAdapter extends ArrayAdapter<Task> {
 
                 title.setText(task.getTitle());
                 desc.setText(task.getDescription());
-                subject.setText(task.getSubject());
+                if(task.getSubject().equals("")) {
+                        subject.setText("-");
+                } else {
+                        subject.setText(task.getSubject());
+                }
                 ownDeadline.setText(dateFormatDeadline.format(task.getOwnDeadline()));
                 actualDeadline.setText(dateFormatDeadline.format(task.getActualDeadline()));
                 if(task.isDone()) {

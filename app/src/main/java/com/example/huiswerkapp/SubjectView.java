@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.google.android.material.navigation.NavigationView;
@@ -64,7 +65,7 @@ public class SubjectView extends AppCompatActivity implements NavigationView.OnN
                 break;
             case R.id.nav_addTask:
                 if(noSubjectsAdded()) {
-                    new AlertDialog.Builder(this)
+                    AlertDialog alertDialog = new AlertDialog.Builder(this)
                             .setTitle("Geen vakken!")
                             .setMessage("Er zijn nog geen vakken toegevoegd! Voeg eerst een vak toe, of ga verder zonder.")
                             .setPositiveButton("Vak toevoegen", new DialogInterface.OnClickListener() {
@@ -75,7 +76,7 @@ public class SubjectView extends AppCompatActivity implements NavigationView.OnN
                                     startActivity(intent);
                                 }
                             })
-                            .setNegativeButton("Ga verder", new DialogInterface.OnClickListener() {
+                            .setNeutralButton("Ga verder", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     Intent intent = new Intent(getApplicationContext(), TaskDetailActivity.class);
@@ -83,7 +84,23 @@ public class SubjectView extends AppCompatActivity implements NavigationView.OnN
                                     startActivity(intent);
                                 }
                             })
-                            .show();
+                            .setIcon(R.drawable.ic_baseline_warning_24)
+                            .create();
+                    alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialogInterface) {
+                            Button positiveButton = ((AlertDialog) dialogInterface)
+                                    .getButton(AlertDialog.BUTTON_POSITIVE);
+                            positiveButton.setBackgroundColor(getResources().getColor(R.color.button_medium_green));
+                            positiveButton.setTextColor(getResources().getColor(R.color.darkGray));
+                            Button neutralButton = ((AlertDialog) dialogInterface)
+                                    .getButton(AlertDialog.BUTTON_NEUTRAL);
+                            neutralButton.setBackgroundColor(getResources().getColor(R.color.button_medium_yellow));
+                            neutralButton.setTextColor(getResources().getColor(R.color.darkGray));
+                        }
+                    });
+
+                    alertDialog.show();
                 } else {
                     Intent newTaskIntent3 = new Intent(this, TaskDetailActivity.class);
                     drawer.closeDrawer(GravityCompat.START);

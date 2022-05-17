@@ -3,7 +3,11 @@ package com.example.huiswerkapp;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -100,10 +104,14 @@ public class SubjectDetailActivity extends AppCompatActivity {
     }
 
     public void deleteSubject(View view) {
-        new AlertDialog.Builder(this)
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder("Je staat op het punt om het vak " +
+                selectedSubject.getName() + " te verwijderen. \n" +
+                "Dit kan niet teruggedraaid worden. \nWeet je het zeker?");
+        StyleSpan bold = new StyleSpan(Typeface.BOLD);
+        spannableStringBuilder.setSpan(bold, 32, 32 + selectedSubject.getName().length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
                 .setTitle("Verwijderen?")
-                .setMessage("Je staat op het punt om het vak \"" + selectedSubject.getName() + "\" te verwijderen. \n" +
-                        "Dit kan niet teruggedraaid worden. \nWeet je het zeker?")
+                .setMessage(spannableStringBuilder)
                 .setPositiveButton("Ja, verwijderen!", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -113,8 +121,24 @@ public class SubjectDetailActivity extends AppCompatActivity {
                         finish();
                     }
                 })
-                .setNegativeButton("Nee, toch niet!", null)
-                .show();
+                .setNeutralButton("Nee, toch niet!", null)
+                .setIcon(R.drawable.ic_baseline_delete_forever_24)
+                .create();
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                Button positiveButton = ((AlertDialog) dialogInterface)
+                        .getButton(AlertDialog.BUTTON_POSITIVE);
+                positiveButton.setBackgroundColor(getResources().getColor(R.color.button_medium_red));
+                positiveButton.setTextColor(getResources().getColor(R.color.darkGray));
+                Button neutralButton = ((AlertDialog) dialogInterface)
+                        .getButton(AlertDialog.BUTTON_NEUTRAL);
+                neutralButton.setBackgroundColor(getResources().getColor(R.color.button_medium_yellow));
+                neutralButton.setTextColor(getResources().getColor(R.color.darkGray));
+            }
+        });
+
+        alertDialog.show();
     }
 
     public void setErrorResets() {
