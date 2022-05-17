@@ -2,17 +2,22 @@ package com.example.huiswerkapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -27,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         initwidgets();
         loadFromDBToMemory();
+        noSubjectsAdded();
         setTaskAdapter();
         setOnClickListener();
 
@@ -55,9 +61,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(newTaskIntent1);
                 break;
             case R.id.nav_addTask:
-                Intent newTaskIntent2 = new Intent(this, TaskDetailActivity.class);
-                drawer.closeDrawer(GravityCompat.START);
-                startActivity(newTaskIntent2);
+                if(noSubjectsAdded()) {
+                    new AlertDialog.Builder(this)
+                            .setTitle("Geen vakken!")
+                            .setMessage("Er zijn nog geen vakken toegevoegd! Voeg eerst een vak toe, of ga verder zonder.")
+                            .setPositiveButton("Vak toevoegen", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    Intent intent = new Intent(getApplicationContext(), SubjectDetailActivity.class);
+                                    drawer.closeDrawer(GravityCompat.START);
+                                    startActivity(intent);
+                                }
+                            })
+                            .setNegativeButton("Ga verder", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    Intent intent = new Intent(getApplicationContext(), TaskDetailActivity.class);
+                                    drawer.closeDrawer(GravityCompat.START);
+                                    startActivity(intent);
+                                }
+                            })
+                            .show();
+                } else {
+                    Intent newTaskIntent2 = new Intent(this, TaskDetailActivity.class);
+                    drawer.closeDrawer(GravityCompat.START);
+                    startActivity(newTaskIntent2);
+                }
                 break;
             case R.id.nav_seeSubjects:
                 Intent newTaskIntent3 = new Intent(this, SubjectView.class);
@@ -91,6 +120,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
         sqLiteManager.populateTaskListArray();
         sqLiteManager.populateSubjectListArray();
+    }
+
+    public boolean noSubjectsAdded() {
+        return Subject.nonDeletedSubjects().isEmpty();
     }
 
     private void setTaskAdapter() {

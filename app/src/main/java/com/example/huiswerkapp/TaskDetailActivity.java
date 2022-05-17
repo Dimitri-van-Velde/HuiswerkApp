@@ -142,7 +142,12 @@ public class TaskDetailActivity extends AppCompatActivity {
         SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
         String title = String.valueOf(titleEditText.getText());
         String desc = String.valueOf(descEditText.getText());
-        String subject = String.valueOf(selectSubject.getSelectedItem().toString());
+        String subject;
+        if(selectSubject.getSelectedItem() == null) {
+            subject = "";
+        } else {
+            subject = String.valueOf(selectSubject.getSelectedItem().toString());
+        }
         Date ownDead = pickerToDate(ownDeadline);
         Date actDead = pickerToDate(actualDeadline);
         String estTime = String.valueOf(timeEstimatedText.getText());

@@ -2,11 +2,13 @@ package com.example.huiswerkapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -27,6 +29,7 @@ public class SubjectView extends AppCompatActivity implements NavigationView.OnN
         setContentView(R.layout.activity_subject_view);
         initwidgets();
         loadFromDBToMemory();
+        noSubjectsAdded();
         setSubjectAdapter();
         setOnClickListener();
 
@@ -60,9 +63,32 @@ public class SubjectView extends AppCompatActivity implements NavigationView.OnN
                 startActivity(newTaskIntent2);
                 break;
             case R.id.nav_addTask:
-                Intent newTaskIntent3 = new Intent(this, TaskDetailActivity.class);
-                drawer.closeDrawer(GravityCompat.START);
-                startActivity(newTaskIntent3);
+                if(noSubjectsAdded()) {
+                    new AlertDialog.Builder(this)
+                            .setTitle("Geen vakken!")
+                            .setMessage("Er zijn nog geen vakken toegevoegd! Voeg eerst een vak toe, of ga verder zonder.")
+                            .setPositiveButton("Vak toevoegen", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    Intent intent = new Intent(getApplicationContext(), SubjectDetailActivity.class);
+                                    drawer.closeDrawer(GravityCompat.START);
+                                    startActivity(intent);
+                                }
+                            })
+                            .setNegativeButton("Ga verder", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    Intent intent = new Intent(getApplicationContext(), TaskDetailActivity.class);
+                                    drawer.closeDrawer(GravityCompat.START);
+                                    startActivity(intent);
+                                }
+                            })
+                            .show();
+                } else {
+                    Intent newTaskIntent3 = new Intent(this, TaskDetailActivity.class);
+                    drawer.closeDrawer(GravityCompat.START);
+                    startActivity(newTaskIntent3);
+                }
                 break;
             case R.id.nav_addSubject:
                 Intent newTaskIntent4 = new Intent(this, SubjectDetailActivity.class);
@@ -90,6 +116,10 @@ public class SubjectView extends AppCompatActivity implements NavigationView.OnN
     private void loadFromDBToMemory() {
         SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
         sqLiteManager.populateSubjectListArray();
+    }
+
+    public boolean noSubjectsAdded() {
+        return Subject.nonDeletedSubjects().isEmpty();
     }
 
     private void setSubjectAdapter() {
