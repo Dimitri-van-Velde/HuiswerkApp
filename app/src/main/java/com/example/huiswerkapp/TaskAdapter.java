@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -44,6 +45,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
                 TextView actualDeadline = convertView.findViewById(R.id.cellActualDeadline);
                 TextView timeEstimated = convertView.findViewById(R.id.cellEstimatedTime);
                 TextView dateDone = convertView.findViewById(R.id.cellDateFinished);
+                ImageView greenCheck = convertView.findViewById(R.id.greenCheck);
 
                 title.setText(task.getTitle());
                 desc.setText(task.getDescription());
@@ -53,6 +55,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
                 if(task.isDone()) {
                         dateDone.setText(dateFormat.format(task.getDateDone()));
                         timeEstimated.setText("");
+                        greenCheck.setImageResource(R.drawable.ic_baseline_check_24_green);
                 } else {
                         dateDone.setText("");
                         timeEstimated.setText(convertTimeEstimated(task));
