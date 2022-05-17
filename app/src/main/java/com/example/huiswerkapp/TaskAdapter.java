@@ -62,6 +62,8 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         }
 
         public String convertTimeEstimated(Task task) {
+                if(task.getTimeEstimated().isEmpty()) return "";
+
                 String converted;
                 int timeEstimated = Integer.parseInt(task.getTimeEstimated());
                 int convertedTimeHours = (timeEstimated - (timeEstimated % 60)) / 60;

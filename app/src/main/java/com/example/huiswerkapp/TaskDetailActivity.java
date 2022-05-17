@@ -5,11 +5,13 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
+import androidx.core.view.ViewCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +19,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -26,14 +30,18 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TaskDetailActivity extends AppCompatActivity {
 
     private EditText titleEditText, descEditText, timeEstimatedText;
+    private TextView titleEditTextError, descEditTextError, timeEstimatedTextError;
     private Button deleteButton, finishButton;
     private Spinner selectSubject;
     private DatePicker ownDeadline, actualDeadline;
     private Task selectedTask;
+    private ScrollView scrollView;
 
     @SuppressLint("SimpleDateFormat")
     private static final DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
@@ -51,6 +59,7 @@ public class TaskDetailActivity extends AppCompatActivity {
         initWidgets();
         populateSpinner();
         checkForEditTask();
+        setErrorResets();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         if (selectedTask != null) {
@@ -71,13 +80,17 @@ public class TaskDetailActivity extends AppCompatActivity {
 
     private void initWidgets() {
         titleEditText = findViewById(R.id.titleEditText);
+        titleEditTextError = findViewById(R.id.titleEditTextError);
         descEditText = findViewById(R.id.descriptionEditText);
+        descEditTextError = findViewById(R.id.descriptionEditTextError);
         deleteButton = findViewById(R.id.deleteTaskButton);
         finishButton = findViewById(R.id.finishedTaskButton);
         selectSubject = findViewById(R.id.selectSubject);
         ownDeadline = findViewById(R.id.datePickerOwnDeadline);
         actualDeadline = findViewById(R.id.datePickerActualDeadline);
         timeEstimatedText = findViewById(R.id.timeEstimatedEditText);
+        timeEstimatedTextError = findViewById(R.id.timeEstimatedEditTextError);
+        scrollView = findViewById(R.id.taskDetailScroll);
     }
 
     private void populateSpinner() {
@@ -135,6 +148,38 @@ public class TaskDetailActivity extends AppCompatActivity {
         String estTime = String.valueOf(timeEstimatedText.getText());
         Date dateDone = new Date();
 
+        boolean anyErrors = false;
+
+        if(title.equals("")) {
+            ColorStateList colorStateList = ColorStateList.valueOf(getResources().getColor(R.color.red));
+            ViewCompat.setBackgroundTintList(titleEditText, colorStateList);
+            titleEditTextError.setVisibility(View.VISIBLE);
+            titleEditTextError.setText("Vul eerst een titel in!");
+            scrollView.scrollTo(0, 0);
+            anyErrors = true;
+        }
+
+        if(desc.equals("")) {
+            ColorStateList colorStateList = ColorStateList.valueOf(getResources().getColor(R.color.red));
+            ViewCompat.setBackgroundTintList(descEditText, colorStateList);
+            descEditTextError.setVisibility(View.VISIBLE);
+            descEditTextError.setText("Vul eerst een beschrijving in!");
+            scrollView.scrollTo(0, 0);
+            anyErrors = true;
+        }
+
+        boolean estTimeHasText = Pattern.matches("[^0-9]", estTime);
+
+        if(estTimeHasText) {
+            ColorStateList colorStateList = ColorStateList.valueOf(getResources().getColor(R.color.red));
+            ViewCompat.setBackgroundTintList(timeEstimatedText, colorStateList);
+            timeEstimatedTextError.setVisibility(View.VISIBLE);
+            timeEstimatedTextError.setText("Vul een getal in!");
+            anyErrors = true;
+        }
+
+        if(anyErrors) return;
+
         if(selectedTask == null) {
             int id = Task.taskArrayList.size();
             Task newTask = new Task(id, title, desc, subject, ownDead, actDead, estTime, false, dateDone);
@@ -174,6 +219,53 @@ public class TaskDetailActivity extends AppCompatActivity {
         finish();
         Intent intent = new Intent(this, FinishedTasks.class);
         startActivity(intent);
+    }
+
+    public void setErrorResets() {
+        titleEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                ColorStateList colorStateList = ColorStateList.valueOf(getResources().getColor(R.color.darkGray));
+                ViewCompat.setBackgroundTintList(titleEditText, colorStateList);
+                titleEditTextError.setVisibility(View.GONE);
+            }
+        });
+
+        descEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                ColorStateList colorStateList = ColorStateList.valueOf(getResources().getColor(R.color.darkGray));
+                ViewCompat.setBackgroundTintList(descEditText, colorStateList);
+                descEditTextError.setVisibility(View.GONE);
+            }
+        });
+
+        timeEstimatedText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                ColorStateList colorStateList = ColorStateList.valueOf(getResources().getColor(R.color.darkGray));
+                ViewCompat.setBackgroundTintList(timeEstimatedText, colorStateList);
+                timeEstimatedTextError.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    public void resetTitleError(View view) {
+        ColorStateList colorStateList = ColorStateList.valueOf(getResources().getColor(R.color.darkGray));
+        ViewCompat.setBackgroundTintList(titleEditText, colorStateList);
+        titleEditTextError.setVisibility(View.GONE);
+    }
+
+    public void resetDescriptionError(View view) {
+        ColorStateList colorStateList = ColorStateList.valueOf(getResources().getColor(R.color.darkGray));
+        ViewCompat.setBackgroundTintList(descEditText, colorStateList);
+        descEditTextError.setVisibility(View.GONE);
+    }
+
+    public void resetTimeEstimatedError(View view) {
+        ColorStateList colorStateList = ColorStateList.valueOf(getResources().getColor(R.color.darkGray));
+        ViewCompat.setBackgroundTintList(timeEstimatedText, colorStateList);
+        timeEstimatedTextError.setVisibility(View.GONE);
     }
 
     @Override
