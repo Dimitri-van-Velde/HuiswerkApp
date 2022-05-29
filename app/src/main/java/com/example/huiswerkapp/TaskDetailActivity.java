@@ -146,8 +146,8 @@ public class TaskDetailActivity extends AppCompatActivity {
 
     public void saveTask(View view) {
         SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
-        String title = String.valueOf(titleEditText.getText());
-        String desc = String.valueOf(descEditText.getText());
+        String title = String.valueOf(titleEditText.getText()).trim();
+        String desc = String.valueOf(descEditText.getText()).trim();
         String subject;
         if(selectSubject.getSelectedItem() == null) {
             subject = "";
@@ -159,9 +159,14 @@ public class TaskDetailActivity extends AppCompatActivity {
         String estTime = String.valueOf(timeEstimatedText.getText());
         Date dateDone = new Date();
 
+        final String regex = "\\A\\s*\\z";
+        final Pattern pattern = Pattern.compile(regex);
+        final Matcher titleMatcher = pattern.matcher(title);
+        final Matcher descMatcher = pattern.matcher(desc);
+
         boolean anyErrors = false;
 
-        if(title.equals("")) {
+        if(title.equals("") || titleMatcher.find()) {
             ColorStateList colorStateList = ColorStateList.valueOf(getResources().getColor(R.color.red));
             ViewCompat.setBackgroundTintList(titleEditText, colorStateList);
             titleEditTextError.setVisibility(View.VISIBLE);
@@ -170,7 +175,7 @@ public class TaskDetailActivity extends AppCompatActivity {
             anyErrors = true;
         }
 
-        if(desc.equals("")) {
+        if(desc.equals("") || descMatcher.find()) {
             ColorStateList colorStateList = ColorStateList.valueOf(getResources().getColor(R.color.red));
             ViewCompat.setBackgroundTintList(descEditText, colorStateList);
             descEditTextError.setVisibility(View.VISIBLE);

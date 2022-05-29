@@ -22,6 +22,8 @@ import androidx.core.view.ViewCompat;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SubjectDetailActivity extends AppCompatActivity {
 
@@ -77,9 +79,13 @@ public class SubjectDetailActivity extends AppCompatActivity {
 
     public void saveSubject(View view) {
         SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
-        String name = String.valueOf(nameEditText.getText());
+        String name = String.valueOf(nameEditText.getText()).trim();
 
-        if(name.equals("")) {
+        final String regex = "\\A\\s*\\z";
+        final Pattern pattern = Pattern.compile(regex);
+        final Matcher nameMatcher = pattern.matcher(name);
+
+        if(name.equals("") || nameMatcher.find()) {
             ColorStateList colorStateList = ColorStateList.valueOf(getResources().getColor(R.color.red));
             ViewCompat.setBackgroundTintList(nameEditText, colorStateList);
             nameEditTextError.setVisibility(View.VISIBLE);
