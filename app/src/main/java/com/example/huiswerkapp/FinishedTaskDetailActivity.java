@@ -5,6 +5,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
 
@@ -14,6 +15,8 @@ public class FinishedTaskDetailActivity extends AppCompatActivity {
 
     private Button unfinishButton;
     private Task selectedTask;
+
+    private long mLastClickTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,26 +51,14 @@ public class FinishedTaskDetailActivity extends AppCompatActivity {
 
         int passedTaskID = previousIntent.getIntExtra(Task.TASK_EDIT_EXTRA, -1);
         selectedTask = Task.getTaskForID(passedTaskID);
-
-//        if(selectedTask != null) {
-//            titleEditText.setText(selectedTask.getTitle());
-//            descEditText.setText(selectedTask.getDescription());
-//            selectSubject.setSelection(getIndex(selectSubject, selectedTask.getSubject()));
-//            ownDeadline.updateDate(Integer.parseInt(dateFormatYear.format(new Date(selectedTask.getOwnDeadline().getTime()))),
-//                    Integer.parseInt(dateFormatMonth.format(new Date(selectedTask.getOwnDeadline().getTime()))) - 1,
-//                    Integer.parseInt(dateFormatDay.format(new Date(selectedTask.getOwnDeadline().getTime()))));
-//            actualDeadline.updateDate(Integer.parseInt(dateFormatYear.format(new Date(selectedTask.getActualDeadline().getTime()))),
-//                    Integer.parseInt(dateFormatMonth.format(new Date(selectedTask.getActualDeadline().getTime()))) - 1,
-//                    Integer.parseInt(dateFormatDay.format(new Date(selectedTask.getActualDeadline().getTime()))));
-//            timeEstimatedText.setText(selectedTask.getTimeEstimated());
-//        }
-//        else {
-//            deleteButton.setVisibility(View.INVISIBLE);
-//            finishButton.setVisibility(View.INVISIBLE);
-//        }
     }
 
     public void unfinishTask(View view) {
+        if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+            return;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
+
         selectedTask.setDone(false);
         SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
         sqLiteManager.updateTaskInDB(selectedTask);

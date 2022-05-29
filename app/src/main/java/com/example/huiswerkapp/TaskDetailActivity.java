@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.StyleSpan;
@@ -48,6 +49,8 @@ public class TaskDetailActivity extends AppCompatActivity {
     private DatePicker ownDeadline, actualDeadline;
     private Task selectedTask;
     private ScrollView scrollView;
+
+    private long mLastClickTime = 0;
 
     @SuppressLint("SimpleDateFormat")
     private static final DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
@@ -145,6 +148,11 @@ public class TaskDetailActivity extends AppCompatActivity {
     }
 
     public void saveTask(View view) {
+        if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+            return;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
+
         SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
         String title = String.valueOf(titleEditText.getText()).trim();
         String desc = String.valueOf(descEditText.getText()).trim();
@@ -259,6 +267,11 @@ public class TaskDetailActivity extends AppCompatActivity {
     }
 
     public void finishTask(View view) {
+        if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+            return;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
+
         selectedTask.setDone(true);
         selectedTask.setDateDone(new Date());
         SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);

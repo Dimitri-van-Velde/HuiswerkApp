@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +27,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawer;
 
     private ListView taskListView;
+
+    private long mLastClickTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,6 +155,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         taskListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+
                 Task selectedTask = (Task) taskListView.getItemAtPosition(position);
                 Intent editTaskIntent = new Intent(getApplicationContext(), TaskDetailActivity.class);
                 editTaskIntent.putExtra(Task.TASK_EDIT_EXTRA, selectedTask.getId());

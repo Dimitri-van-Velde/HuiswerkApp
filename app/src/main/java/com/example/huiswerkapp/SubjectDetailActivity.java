@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.StyleSpan;
@@ -31,6 +32,8 @@ public class SubjectDetailActivity extends AppCompatActivity {
     private TextView nameEditTextError;
     private Button deleteButton;
     private Subject selectedSubject;
+
+    private long mLastClickTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +81,11 @@ public class SubjectDetailActivity extends AppCompatActivity {
     }
 
     public void saveSubject(View view) {
+        if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+            return;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
+
         SQLiteManager sqLiteManager = SQLiteManager.instanceOfDatabase(this);
         String name = String.valueOf(nameEditText.getText()).trim();
 

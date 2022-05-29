@@ -17,7 +17,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
     private static SQLiteManager sqLiteManager;
 
-    private static final String DATABASE_NAME = "DB12";
+    private static final String DATABASE_NAME = "TaskDB";
     private static final int DATABASE_VERSION = 1;
     private static final String TASK_TABLE_NAME = "Task";
     private static final String SUBJECT_TABLE_NAME = "Subject";

@@ -11,6 +11,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,6 +24,8 @@ public class SubjectView extends AppCompatActivity implements NavigationView.OnN
     private DrawerLayout drawer;
 
     private ListView subjectListView;
+
+    private long mLastClickTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,6 +151,11 @@ public class SubjectView extends AppCompatActivity implements NavigationView.OnN
         subjectListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+
                 Subject selectedSubject = (Subject) subjectListView.getItemAtPosition(position);
                 Intent editSubjectIntent = new Intent(getApplicationContext(), SubjectDetailActivity.class);
                 editSubjectIntent.putExtra(Subject.SUBJECT_EDIT_EXTRA, selectedSubject.getId());

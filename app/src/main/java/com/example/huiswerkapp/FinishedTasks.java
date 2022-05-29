@@ -11,6 +11,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,6 +24,8 @@ public class FinishedTasks extends AppCompatActivity implements NavigationView.O
     private DrawerLayout drawer;
 
     private ListView finishedTaskListView;
+
+    private long mLastClickTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,6 +151,11 @@ public class FinishedTasks extends AppCompatActivity implements NavigationView.O
         finishedTaskListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                if(SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+
                 Task selectedTask = (Task) finishedTaskListView.getItemAtPosition(position);
                 Intent editTaskIntent = new Intent(getApplicationContext(), FinishedTaskDetailActivity.class);
                 editTaskIntent.putExtra(Task.TASK_EDIT_EXTRA, selectedTask.getId());
